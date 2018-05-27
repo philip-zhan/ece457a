@@ -16,7 +16,7 @@ def main():
     bounds = root.find('bounds').attrib
 
     building_ways = get_building_ways(root)
-    node_dict = get_node_dict(root)
+    node_dict = get_node_dictionary(root)
     building_coords = get_building_coords(building_ways, node_dict, bounds)
     exclude_ranges = get_exclude_ranges(building_coords)
     edges = get_edges(bounds, max_height, exclude_ranges)
@@ -25,7 +25,7 @@ def main():
 
     # draw_graph(graph, source, destination)
 
-    breath_first_search(graph, source, destination)
+    breadth_first_search(graph, source, destination)
     for beam_width in range(2, 7):
         beam_search(graph, source, destination, beam_width)
 
@@ -43,7 +43,7 @@ def get_building_ways(root):
     return building_ways
 
 
-def get_node_dict(root):
+def get_node_dictionary(root):
     node_dict = {}
     for node in root.findall('./node'):
         node_dict[node.attrib.get('id')] = (node.attrib.get('lat'), node.attrib.get('lon'))
@@ -139,14 +139,14 @@ def draw_graph(graph, source, destination):
     plt.show()
 
 
-def breath_first_search(graph, source, destination):
+def breadth_first_search(graph, source, destination):
     path = []
     for edge in nx.bfs_edges(graph, source):
         if edge[1] != destination:
             path.append(edge[1])
         else:
             break
-    print 'breath first search cost:', len(path)
+    print 'breadth first search cost:', len(path)
 
 
 def beam_search(graph, source, destination, beam_width):
