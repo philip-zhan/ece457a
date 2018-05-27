@@ -125,7 +125,7 @@ def get_src_dest(edges):
 def build_graph(edges):
     graph = nx.Graph()
     graph.add_edges_from(edges)
-    print 'graph is built'
+    print 'graph has been built.'
     return graph
 
 
