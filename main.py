@@ -38,8 +38,8 @@ def get_building_ways(root):
         for nd in way.findall('nd'):
             nd_refs.append(nd.attrib.get('ref'))
         building_ways.append((nd_refs, height))
-    print 'building_ways[0]:', building_ways[0]
-    print 'len(building_ways):', len(building_ways)
+    # print 'building_ways[0]:', building_ways[0]
+    # print 'len(building_ways):', len(building_ways)
     return building_ways
 
 
@@ -47,8 +47,8 @@ def get_node_dictionary(root):
     node_dict = {}
     for node in root.findall('./node'):
         node_dict[node.attrib.get('id')] = (node.attrib.get('lat'), node.attrib.get('lon'))
-    print 'node_dict.items()[0]:', node_dict.items()[0]
-    print 'len(node_dict):', len(node_dict)
+    # print 'node_dict.items()[0]:', node_dict.items()[0]
+    # print 'len(node_dict):', len(node_dict)
     return node_dict
 
 
@@ -63,8 +63,8 @@ def get_building_coords(building_ways, node_dict, bounds):
                 lat_to_y(node_dict[ref][0], bounds['minlat'])
             ))
         building_coords.append((height, nd_coords))
-    print 'building_coords[0]:', building_coords[0]
-    print 'len(building_coords):', len(building_coords)
+    # print 'building_coords[0]:', building_coords[0]
+    # print 'len(building_coords):', len(building_coords)
     return building_coords
 
 
@@ -86,8 +86,8 @@ def get_exclude_ranges(building_coords):
                 max_y = building_node[1]
         range_dict = {'min_x': min_x, 'max_x': max_x, 'min_y': min_y, 'max_y': max_y, 'z': building_nodes[0]}
         exclude_ranges.append(range_dict)
-    print 'exclude_ranges[0]:', exclude_ranges[0]
-    print 'len(exclude_ranges):', len(exclude_ranges)
+    # print 'exclude_ranges[0]:', exclude_ranges[0]
+    # print 'len(exclude_ranges):', len(exclude_ranges)
     return exclude_ranges
 
 
@@ -109,23 +109,23 @@ def get_edges(bounds, max_height, exclude_ranges):
                     edges.append(((x, y, z), (x + 1, y, z)))
                     edges.append(((x, y, z), (x, y + 1, z)))
                     edges.append(((x, y, z), (x, y, z + 1)))
-    print 'edges[0]:', edges[0]
-    print 'len(edges):', len(edges)
+    # print 'edges[0]:', edges[0]
+    # print 'len(edges):', len(edges)
     return edges
 
 
 def get_src_dest(edges):
     source = edges[random.randint(1, len(edges) - 1)][0]
     destination = edges[random.randint(1, len(edges) - 1)][0]
-    print 'source:', source
-    print 'destination:', destination
+    print(f'source: {source}')
+    print(f'destination: {destination}')
     return source, destination
 
 
 def build_graph(edges):
     graph = nx.Graph()
     graph.add_edges_from(edges)
-    print 'graph has been built.'
+    print('graph has been built')
     return graph
 
 
@@ -146,18 +146,18 @@ def breadth_first_search(graph, source, destination):
             path.append(edge[1])
         else:
             break
-    print 'breadth first search cost:', len(path)
+    print(f'breadth first search cost: {len(path)}')
 
 
 def beam_search(graph, source, destination, beam_width):
-    print 'doing beam search with beam width =', beam_width
+    print(f'doing beam search with beam width: {beam_width}')
     path = []
     for edge in nx.bfs_beam_edges(graph, source, lambda _: 1, beam_width):
         if edge[1] != destination:
             path.append(edge[1])
         else:
             break
-    print 'beam search cost:', len(path)
+    print(f'beam search cost: {len(path)}')
 
 
 def lon_to_x(lon, minlon):
