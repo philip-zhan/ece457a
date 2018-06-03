@@ -8,6 +8,14 @@ class Graph:
 
     def main(self):
         map_name = 'map_uwaterloo.osm.xml'
+        # generate graph from map
+        graph, source, destination = self.get_graph(map_name)
+        # draw_graph(graph, source, destination)
+        self.breadth_first_search(graph, source, destination)
+        for beam_width in range(2, 7):
+            self.beam_search(graph, source, destination, beam_width)
+
+    def get_graph(self, map_name):
         # parse the map file
         osm = ET.parse(map_name)
         root = osm.getroot()
@@ -24,10 +32,7 @@ class Graph:
         edges = self.get_edges(bounds, max_height, exclude_ranges)
         source, destination = self.get_src_dest(edges)
         graph = self.build_graph(edges)
-        # draw_graph(graph, source, destination)
-        self.breadth_first_search(graph, source, destination)
-        for beam_width in range(2, 7):
-            self.beam_search(graph, source, destination, beam_width)
+        return graph, source, destination
     
     def lon_to_x(self, lon, minlon):
         return int((float(lon) - float(minlon)) * 5000)
