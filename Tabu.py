@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 import random
+import math
 
 
 def main():
@@ -15,8 +16,8 @@ def main():
     nodes = generate_nodes(x_max, y_max, z_max, number_of_dest + 1)
     home = nodes[0]
     destinations = nodes[1:]
-    print(home)
-    print(destinations)
+    print(f'home: {home}')
+    print(f'destinations: {destinations}')
 
 
 def lon_to_x(lon, min_lon):
@@ -33,6 +34,10 @@ def generate_nodes(x_max, y_max, z_max, number):
         destinations.append(
             (int(x_max * random.random()), int(y_max * random.random()), int(z_max * random.random())))
     return destinations
+
+
+def calculate_cost(a, b):
+    return math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2)
 
 
 if __name__ == '__main__':
