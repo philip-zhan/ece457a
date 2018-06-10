@@ -46,21 +46,28 @@ def run_sa(nodes, cost_dict, neighbourhood):
 
     while current_temp > minimum_temp:
         for i in range(num_iterations):
+            # Select a solution si from the neighborhood N (s)
             new_path, new_cost = select_a_solution(
                 neighbourhood,
+                # use the current temp and current iteration as an unique seed
                 current_temp * num_iterations + i,
                 path,
                 cost_dict
             )
+            # Calculate change in cost C according to the new solution
             cost_diff = new_cost - cost
+            # If C < 0 then accept new solution (it is improving) -> s= si
             if cost_diff < 0:
                 path = new_path
                 cost = new_cost
+            # Else generate a random number x in the range (0,1)
             else:
                 x = random.random()
+                # If x<e c/t then accept new solution s=si
                 if x < calculate_acceptance_probability(current_temp, cost_diff):
                     path = new_path
                     cost = new_cost
+        # Decrease t using alpha
         current_temp = decrement_temp(current_temp)
 
     print(f'final path: {path}')
@@ -68,15 +75,20 @@ def run_sa(nodes, cost_dict, neighbourhood):
 
 
 def select_a_solution(neighbourhood, seed, current_path, cost_dict):
+    # use the current temp and current iteration as an unique seed
     random.seed(seed)
+    # get a random neighbour from the neighbourhood
     neighbour = neighbourhood[random.randint(0, len(neighbourhood)-1)]
-
+    # get the index of the first swapped node
     swap_first = current_path.index(neighbour[0])
+    # get the index of the second swapped node
     swap_second = current_path.index(neighbour[1])
+    # make the swap
     new_path = current_path
     temp = current_path[swap_first]
     new_path[swap_first] = current_path[swap_second]
     new_path[swap_second] = temp
+    # calculate the new cost
     new_cost = 0
     for i in range(len(new_path)):
         new_cost += cost_dict[(new_path[i - 1], new_path[i])]
