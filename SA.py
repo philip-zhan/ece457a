@@ -1,13 +1,15 @@
 import xml.etree.ElementTree as ET
 import random
 import math
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 
-number_of_dest = 20
+number_of_dest = 10
 initial_temp = 1000
 minimum_temp = 0
 cooling_rate = 1
-num_iterations = 10
+num_iterations = 100
 
 
 def main():
@@ -43,7 +45,15 @@ def run_sa(nodes, cost_dict, neighbourhood):
     print(f'initial path: {path}')
     print(f'initial cost: {cost}')
     print('======================================================================')
-
+    # plot the initial path
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    xs = [node[0] for node in path]
+    ys = [node[1] for node in path]
+    zs = [node[2] for node in path]
+    ax.plot(xs, ys, zs)
+    plt.show()
+    # do SA
     while current_temp > minimum_temp:
         for i in range(num_iterations):
             # Select a solution si from the neighborhood N (s)
@@ -69,6 +79,14 @@ def run_sa(nodes, cost_dict, neighbourhood):
                     cost = new_cost
         # Decrease t using alpha
         current_temp = decrement_temp(current_temp)
+    # plot the final path
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    xs = [node[0] for node in path]
+    ys = [node[1] for node in path]
+    zs = [node[2] for node in path]
+    ax.plot(xs, ys, zs)
+    plt.show()
 
     print(f'final path: {path}')
     print(f'final cost: {cost}')
