@@ -3,9 +3,15 @@ import random
 import math
 
 
+number_of_dest = 20
+initial_temp = 1000
+minimum_temp = 0
+cooling_rate = 1
+num_iterations = 10
+
+
 def main():
     map_name = 'map_uwaterloo.osm.xml'
-    number_of_dest = 20
     osm = ET.parse(map_name)
     root = osm.getroot()
     # get the boundary of the map
@@ -16,9 +22,74 @@ def main():
     nodes = generate_nodes(x_max, y_max, z_max, number_of_dest + 1)
     home = nodes[0]
     destinations = nodes[1:]
-    print(f'home: {home}')
-    print(f'destinations: {destinations}')
-        neighbourhood = build_neighbourhood(destinations)
+    # print(f'home: {home}')
+    # print(f'destinations: {destinations}')
+    neighbourhood = build_neighbourhood(destinations)
+    cost_dict = build_cost_dict(nodes)
+
+    run_sa(nodes, cost_dict, neighbourhood)
+
+
+def run_sa(nodes, cost_dict, neighbourhood):
+    print('running SA......')
+    print('======================================================================')
+    # Set current temperature to an initial temperature t = t0
+    current_temp = initial_temp
+    # Set current solution to an initial solution s=s0
+    path = nodes
+    cost = 0
+    for i in range(len(path)):
+        cost += cost_dict[(path[i-1], path[i])]
+    print(f'initial path: {path}')
+    print(f'initial cost: {cost}')
+    print('======================================================================')
+
+    while current_temp > minimum_temp:
+        for i in range(num_iterations):
+            new_path, new_cost = select_a_solution(
+                neighbourhood,
+                current_temp * num_iterations + i,
+                path,
+                cost_dict
+            )
+            cost_diff = new_cost - cost
+            if cost_diff < 0:
+                path = new_path
+                cost = new_cost
+            else:
+                x = random.random()
+                if x < calculate_acceptance_probability(current_temp, cost_diff):
+                    path = new_path
+                    cost = new_cost
+        current_temp = decrement_temp(current_temp)
+
+    print(f'final path: {path}')
+    print(f'final cost: {cost}')
+
+
+def select_a_solution(neighbourhood, seed, current_path, cost_dict):
+    random.seed(seed)
+    neighbour = neighbourhood[random.randint(0, len(neighbourhood)-1)]
+
+    swap_first = current_path.index(neighbour[0])
+    swap_second = current_path.index(neighbour[1])
+    new_path = current_path
+    temp = current_path[swap_first]
+    new_path[swap_first] = current_path[swap_second]
+    new_path[swap_second] = temp
+    new_cost = 0
+    for i in range(len(new_path)):
+        new_cost += cost_dict[(new_path[i - 1], new_path[i])]
+    return new_path, new_cost
+
+
+def calculate_acceptance_probability(current_temp, cost_diff):
+    return math.exp(- cost_diff / current_temp)
+
+
+# Linear rule
+def decrement_temp(current_temp):
+    return current_temp - cooling_rate
 
 
 def lon_to_x(lon, min_lon):
@@ -48,3 +119,16 @@ def build_neighbourhood(destinations):
         for j in range(i+1, len(destinations)):
             neighbourhood.append((destinations[i], destinations[j]))
     return neighbourhood
+
+
+def build_cost_dict(nodes):
+    cost_dict = {}
+    for node1 in nodes:
+        for node2 in nodes:
+            if node1 != node2:
+                cost_dict[(node1, node2)] = calculate_cost(node1, node2)
+    return cost_dict
+
+
+if __name__ == '__main__':
+    main()
