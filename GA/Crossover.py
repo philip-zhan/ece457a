@@ -93,7 +93,36 @@ class Crossover(Enum):
         return child1, child2
 
     def pmx(self, parent1, parent2):
-        pass
+        length = len(parent1)
+        start = random.randrange(length)
+        stop = random.randrange(start, length)
+        # print(start, stop)
+        child1 = [None] * start + parent1[start:stop] + \
+            [None] * (length - stop)
+        child2 = [None] * start + parent2[start:stop] + \
+            [None] * (length - stop)
+        # print(child1, child2)
+        for i in range(start, stop):
+            if parent2[i] not in child1:
+                j = i
+                k = parent2.index(parent1[j])
+                while child1[k] is not None:
+                    j = k
+                    k = parent2.index(parent1[j])
+                child1[k] = parent2[i]
+            if parent1[i] not in child2:
+                j = i
+                k = parent1.index(parent2[j])
+                while child2[k] is not None:
+                    j = k
+                    k = parent1.index(parent2[j])
+                child2[k] = parent1[i]
+        for i in range(length):
+            if child1[i] is None:
+                child1[i] = parent2[i]
+            if child2[i] is None:
+                child2[i] = parent1[i]
+        return child1, child2
 
     def order1(self, parent1, parent2):
         k = random.randrange(len(parent1))

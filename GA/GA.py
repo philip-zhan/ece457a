@@ -16,5 +16,5 @@ print('WHOLE_ARITHMETIC', Crossover.WHOLE_ARITHMETIC.run(parent1, parent2))
 
 # PGA
 parent1 = [1, 2, 3, 4, 5]
-parent2 = [5, 4, 3, 2, 1]
+parent2 = [5, 4, 1, 3, 2]
 print('PMX', Crossover.PMX.run(parent1, parent2))
