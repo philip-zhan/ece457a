@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, auto
 import random
 
 
@@ -7,12 +7,28 @@ alpha = 0.5
 
 
 class Crossover(Enum):
-    SINGLE_ARITHMETIC = 1
-    SIMPLE_ARITHMETIC = 2
-    WHOLE_ARITHMETIC = 3
-    PMX = 4
-    ORDER1 = 5
-    CYCLE = 6
+    ONE_POINT = auto()
+    N_POINT = auto()
+    SINGLE_ARITHMETIC = auto()
+    SIMPLE_ARITHMETIC = auto()
+    WHOLE_ARITHMETIC = auto()
+    PMX = auto()
+    ORDER1 = auto()
+    CYCLE = auto()
+
+    def one_point(self, parent1, parent2):
+        k = random.randint(len(parent1))
+        child1 = parent1[:k] + parent2[k:]
+        child2 = parent1[k:] + parent2[:k]
+        return child1, child2
+
+    def n_point(self, parent1, parent2):
+        n = random.randint(len(parent1))
+        child1 = parent1
+        child2 = parent2
+        for i in range(n):
+            child1, child2 = self.one_point(child1, child2)
+        return child1, child2
 
     def single_arithmetic(self, parent1, parent2):
         k = random.randint(len(parent1))
@@ -52,6 +68,8 @@ class Crossover(Enum):
 def crossover(parent1, parent2, method):
     if len(parent1) != len(parent2):
         return None
+    if method == Crossover.ONE_POINT:
+        return method.one_point(parent1, parent2)
     if method == Crossover.SINGLE_ARITHMETIC:
         return method.single_arithmetic(parent1, parent2)
     if method == Crossover.SIMPLE_ARITHMETIC:
