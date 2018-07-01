@@ -1,4 +1,5 @@
 from enum import Enum
+import random
 
 
 class Crossover(Enum):
@@ -10,7 +11,15 @@ class Crossover(Enum):
     CYCLE = 6
 
     def single_arithmetic(self, parent1, parent2):
-        pass
+        k = random.randint()
+        alpha = 0.5
+        child1 = parent1[:k]
+        for i in range(k, len(parent1)):
+            child1.append(alpha * parent2[i] + (1 - alpha) * parent1[i])
+        child2 = parent2[:k]
+        for i in range(k, len(parent1)):
+            child1.append(alpha * parent1[i] + (1 - alpha) * parent2[i])
+        return child1, child2
 
     def simple_arithmetic(self, parent1, parent2):
         pass
@@ -29,16 +38,18 @@ class Crossover(Enum):
 
 
 def crossover(parent1, parent2, method):
+    if len(parent1) != len(parent2):
+        return None
     if method == Crossover.SINGLE_ARITHMETIC:
-        method.single_arithmetic(parent1, parent2)
-    elif method == Crossover.SIMPLE_ARITHMETIC:
-        method.simple_arithmetic(parent1, parent2)
-    elif method == Crossover.WHOLE_ARITHMETIC:
-        method.whole_arithmetic(parent1, parent2)
-    elif method == Crossover.PMX:
-        method.pmx(parent1, parent2)
-    elif method == Crossover.ORDER1:
-        method.order1(parent1, parent2)
-    elif method == Crossover.CYCLE:
-        method.cycle(parent1, parent2)
+        return method.single_arithmetic(parent1, parent2)
+    if method == Crossover.SIMPLE_ARITHMETIC:
+        return method.simple_arithmetic(parent1, parent2)
+    if method == Crossover.WHOLE_ARITHMETIC:
+        return method.whole_arithmetic(parent1, parent2)
+    if method == Crossover.PMX:
+        return method.pmx(parent1, parent2)
+    if method == Crossover.ORDER1:
+        return method.order1(parent1, parent2)
+    if method == Crossover.CYCLE:
+        return method.cycle(parent1, parent2)
 
