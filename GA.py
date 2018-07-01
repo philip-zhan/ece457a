@@ -2,6 +2,10 @@ from enum import Enum
 import random
 
 
+# parameters
+alpha = 0.5
+
+
 class Crossover(Enum):
     SINGLE_ARITHMETIC = 1
     SIMPLE_ARITHMETIC = 2
@@ -11,8 +15,7 @@ class Crossover(Enum):
     CYCLE = 6
 
     def single_arithmetic(self, parent1, parent2):
-        k = random.randint()
-        alpha = 0.5
+        k = random.randint(len(parent1))
         child1 = parent1
         child1[k] = alpha * parent2[k] + (1 - alpha) * parent1[k]
         child2 = parent2
@@ -20,18 +23,21 @@ class Crossover(Enum):
         return child1, child2
 
     def simple_arithmetic(self, parent1, parent2):
-        k = random.randint()
-        alpha = 0.5
+        k = random.randint(len(parent1))
         child1 = parent1[:k]
-        for i in range(k, len(parent1)):
-            child1.append(alpha * parent2[i] + (1 - alpha) * parent1[i])
         child2 = parent2[:k]
         for i in range(k, len(parent1)):
-            child1.append(alpha * parent1[i] + (1 - alpha) * parent2[i])
+            child1.append(alpha * parent2[i] + (1 - alpha) * parent1[i])
+            child2.append(alpha * parent1[i] + (1 - alpha) * parent2[i])
         return child1, child2
 
     def whole_arithmetic(self, parent1, parent2):
-        pass
+        child1 = []
+        child2 = []
+        for i in range(len(parent1)):
+            child1.append(alpha * parent1[i] + (1 - alpha) * parent2[i])
+            child2.append(alpha * parent2[i] + (1 - alpha) * parent1[i])
+        return child1, child2
 
     def pmx(self, parent1, parent2):
         pass
