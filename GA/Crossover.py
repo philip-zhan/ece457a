@@ -42,49 +42,51 @@ class Crossover(Enum):
     def one_point(self, parent1, parent2):
         k = random.randrange(len(parent1))
         child1 = parent1[:k] + parent2[k:]
-        child2 = parent1[k:] + parent2[:k]
+        child2 = parent2[:k] + parent1[k:]
         return child1, child2
 
     def n_point(self, parent1, parent2):
         n = random.randrange(len(parent1))
-        child1 = parent1
-        child2 = parent2
+        child1 = parent1.copy()
+        child2 = parent2.copy()
         for i in range(n):
             child1, child2 = self.one_point(child1, child2)
         return child1, child2
 
     def uniform(self, parent1, parent2):
-        child1 = parent1
+        child1 = parent1.copy()
+        child2 = parent2.copy()
         child1[-1] = parent2[-1]
-        child2 = parent2
         child2[-1] = parent1[-1]
+        # print(parent1, parent2, child1, child2)
         parents = [parent1, parent2]
         for i in range(1, len(parent1)-1):
             coin = random.getrandbits(1)
+            # print(coin, child1, child2)
             child1[i] = parents[coin][i]
             child2[i] = parents[1-coin][i]
         return child1, child2
 
     def single_arithmetic(self, parent1, parent2):
         k = random.randrange(len(parent1))
-        child1 = parent1
-        child2 = parent2
+        child1 = parent1.copy()
+        child2 = parent2.copy()
         child1[k] = alpha * parent2[k] + (1 - alpha) * parent1[k]
         child2[k] = alpha * parent1[k] + (1 - alpha) * parent2[k]
         return child1, child2
 
     def simple_arithmetic(self, parent1, parent2):
         k = random.randrange(len(parent1))
-        child1 = parent1
-        child2 = parent2
+        child1 = parent1.copy()
+        child2 = parent2.copy()
         for i in range(k+1, len(parent1)):
             child1[i] = alpha * parent2[i] + (1 - alpha) * parent1[i]
             child2[i] = alpha * parent1[i] + (1 - alpha) * parent2[i]
         return child1, child2
 
     def whole_arithmetic(self, parent1, parent2):
-        child1 = parent1
-        child2 = parent2
+        child1 = parent1.copy()
+        child2 = parent2.copy()
         for i in range(len(parent1)):
             child1[i] = alpha * parent1[i] + (1 - alpha) * parent2[i]
             child2[i] = alpha * parent2[i] + (1 - alpha) * parent1[i]
