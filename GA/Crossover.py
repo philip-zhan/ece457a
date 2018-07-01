@@ -9,6 +9,7 @@ alpha = 0.5
 class Crossover(Enum):
     ONE_POINT = auto()
     N_POINT = auto()
+    UNIFORM = auto()
     SINGLE_ARITHMETIC = auto()
     SIMPLE_ARITHMETIC = auto()
     WHOLE_ARITHMETIC = auto()
@@ -16,22 +17,56 @@ class Crossover(Enum):
     ORDER1 = auto()
     CYCLE = auto()
 
+    def run(self, parent1, parent2):
+        if len(parent1) != len(parent2):
+            return None
+        if self is self.ONE_POINT:
+            return self.one_point(parent1, parent2)
+        if self is self.N_POINT:
+            return self.n_point(parent1, parent2)
+        if self is self.UNIFORM:
+            return self.uniform(parent1, parent2)
+        if self is self.SINGLE_ARITHMETIC:
+            return self.single_arithmetic(parent1, parent2)
+        if self is self.SIMPLE_ARITHMETIC:
+            return self.simple_arithmetic(parent1, parent2)
+        if self is self.WHOLE_ARITHMETIC:
+            return self.whole_arithmetic(parent1, parent2)
+        if self is self.PMX:
+            return self.pmx(parent1, parent2)
+        if self is self.ORDER1:
+            return self.order1(parent1, parent2)
+        if self is self.CYCLE:
+            return self.cycle(parent1, parent2)
+
     def one_point(self, parent1, parent2):
-        k = random.randint(len(parent1))
+        k = random.randrange(len(parent1))
         child1 = parent1[:k] + parent2[k:]
         child2 = parent1[k:] + parent2[:k]
         return child1, child2
 
     def n_point(self, parent1, parent2):
-        n = random.randint(len(parent1))
+        n = random.randrange(len(parent1))
         child1 = parent1
         child2 = parent2
         for i in range(n):
             child1, child2 = self.one_point(child1, child2)
         return child1, child2
 
+    def uniform(self, parent1, parent2):
+        child1 = parent1
+        child1[-1] = parent2[-1]
+        child2 = parent2
+        child2[-1] = parent1[-1]
+        parents = [parent1, parent2]
+        for i in range(1, len(parent1)-1):
+            coin = random.getrandbits(1)
+            child1[i] = parents[coin][i]
+            child2[i] = parents[1-coin][i]
+        return child1, child2
+
     def single_arithmetic(self, parent1, parent2):
-        k = random.randint(len(parent1))
+        k = random.randrange(len(parent1))
         child1 = parent1
         child1[k] = alpha * parent2[k] + (1 - alpha) * parent1[k]
         child2 = parent2
@@ -39,7 +74,7 @@ class Crossover(Enum):
         return child1, child2
 
     def simple_arithmetic(self, parent1, parent2):
-        k = random.randint(len(parent1))
+        k = random.randrange(len(parent1))
         child1 = parent1[:k]
         child2 = parent2[:k]
         for i in range(k, len(parent1)):
@@ -63,23 +98,3 @@ class Crossover(Enum):
 
     def cycle(self, parent1, parent2):
         pass
-
-
-def crossover(parent1, parent2, method):
-    if len(parent1) != len(parent2):
-        return None
-    if method == Crossover.ONE_POINT:
-        return method.one_point(parent1, parent2)
-    if method == Crossover.SINGLE_ARITHMETIC:
-        return method.single_arithmetic(parent1, parent2)
-    if method == Crossover.SIMPLE_ARITHMETIC:
-        return method.simple_arithmetic(parent1, parent2)
-    if method == Crossover.WHOLE_ARITHMETIC:
-        return method.whole_arithmetic(parent1, parent2)
-    if method == Crossover.PMX:
-        return method.pmx(parent1, parent2)
-    if method == Crossover.ORDER1:
-        return method.order1(parent1, parent2)
-    if method == Crossover.CYCLE:
-        return method.cycle(parent1, parent2)
-
