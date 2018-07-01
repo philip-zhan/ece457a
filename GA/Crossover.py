@@ -68,26 +68,26 @@ class Crossover(Enum):
     def single_arithmetic(self, parent1, parent2):
         k = random.randrange(len(parent1))
         child1 = parent1
-        child1[k] = alpha * parent2[k] + (1 - alpha) * parent1[k]
         child2 = parent2
+        child1[k] = alpha * parent2[k] + (1 - alpha) * parent1[k]
         child2[k] = alpha * parent1[k] + (1 - alpha) * parent2[k]
         return child1, child2
 
     def simple_arithmetic(self, parent1, parent2):
         k = random.randrange(len(parent1))
-        child1 = parent1[:k]
-        child2 = parent2[:k]
-        for i in range(k, len(parent1)):
-            child1.append(alpha * parent2[i] + (1 - alpha) * parent1[i])
-            child2.append(alpha * parent1[i] + (1 - alpha) * parent2[i])
+        child1 = parent1
+        child2 = parent2
+        for i in range(k+1, len(parent1)):
+            child1[i] = alpha * parent2[i] + (1 - alpha) * parent1[i]
+            child2[i] = alpha * parent1[i] + (1 - alpha) * parent2[i]
         return child1, child2
 
     def whole_arithmetic(self, parent1, parent2):
-        child1 = []
-        child2 = []
+        child1 = parent1
+        child2 = parent2
         for i in range(len(parent1)):
-            child1.append(alpha * parent1[i] + (1 - alpha) * parent2[i])
-            child2.append(alpha * parent2[i] + (1 - alpha) * parent1[i])
+            child1[i] = alpha * parent1[i] + (1 - alpha) * parent2[i]
+            child2[i] = alpha * parent2[i] + (1 - alpha) * parent1[i]
         return child1, child2
 
     def pmx(self, parent1, parent2):
