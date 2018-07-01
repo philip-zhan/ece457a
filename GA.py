@@ -15,7 +15,7 @@ class Crossover(Enum):
     CYCLE = 6
 
     def single_arithmetic(self, parent1, parent2):
-        k = random.randint(len(parent1))
+        k = random.randint(0, len(parent1)-1)
         child1 = parent1
         child1[k] = alpha * parent2[k] + (1 - alpha) * parent1[k]
         child2 = parent2
@@ -23,7 +23,7 @@ class Crossover(Enum):
         return child1, child2
 
     def simple_arithmetic(self, parent1, parent2):
-        k = random.randint(len(parent1))
+        k = random.randint(0, len(parent1)-1)
         child1 = parent1[:k]
         child2 = parent2[:k]
         for i in range(k, len(parent1)):
@@ -43,7 +43,13 @@ class Crossover(Enum):
         pass
 
     def order1(self, parent1, parent2):
-        pass
+        k = random.randint(0, len(parent1)-1)
+        length = random.randint(1, len(parent1))
+        child = parent1
+        start = (k+length) % (len(parent1)-1)
+        for i in range(len(parent1)-length):
+            child[(start+i) % (len(parent1)-1)] = parent2[(start+i) % (len(parent1)-1)]
+        return child
 
     def cycle(self, parent1, parent2):
         pass
