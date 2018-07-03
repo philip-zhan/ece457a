@@ -2,7 +2,7 @@ from Crossover import Crossover
 from Mutation import Mutation
 
 crossover = Crossover(alpha=0.5)
-mutation = Mutation(mutation_rate=0.1)
+mutation = Mutation(mutation_rate=0.2)
 
 # SGA
 parent1 = [0, 0, 0, 0, 0]
@@ -25,5 +25,6 @@ print('noise mutation', mutation.random_noise(parent2, 0.1))
 parent1 = [1, 2, 3, 4, 5]
 parent2 = [5, 4, 1, 3, 2]
 print('insert mutation', mutation.insert(parent1))
+print('swap mutation', mutation.swap(parent1))
 # print('PMX', crossover.pmx(parent1, parent2))
 # print('ORDER1', crossover.order1(parent1, parent2))

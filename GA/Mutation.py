@@ -32,3 +32,13 @@ class Mutation:
                 second = random.randrange(first+1, len(chromosome))
                 chromosome.insert(first+1, chromosome.pop(second))
         return chromosome
+
+    def swap(self, chromosome):
+        for i in range(len(chromosome)):
+            if random.random() < self.mutation_rate:
+                first = random.randrange(len(chromosome)-1)
+                second = random.randrange(first+1, len(chromosome))
+                temp = chromosome[first]
+                chromosome[first] = chromosome[second]
+                chromosome[second] = temp
+        return chromosome
