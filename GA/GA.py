@@ -24,5 +24,6 @@ print('noise mutation', mutation.random_noise(parent2, 0.1))
 # PGA
 parent1 = [1, 2, 3, 4, 5]
 parent2 = [5, 4, 1, 3, 2]
+print('insert mutation', mutation.insert(parent1))
 # print('PMX', crossover.pmx(parent1, parent2))
 # print('ORDER1', crossover.order1(parent1, parent2))

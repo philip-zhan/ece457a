@@ -24,3 +24,11 @@ class Mutation:
             if random.random() < self.mutation_rate:
                 chromosome[i] += random.gauss(0, sigma)
         return chromosome
+
+    def insert(self, chromosome):
+        for i in range(len(chromosome)):
+            if random.random() < self.mutation_rate:
+                first = random.randrange(len(chromosome)-1)
+                second = random.randrange(first+1, len(chromosome))
+                chromosome.insert(first+1, chromosome.pop(second))
+        return chromosome
