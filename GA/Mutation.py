@@ -18,3 +18,9 @@ class Mutation:
             if random.random() < self.mutation_rate:
                 chromosome[i] = random.uniform(lb, ub)
         return chromosome
+
+    def random_noise(self, chromosome, sigma):
+        for i in range(len(chromosome)):
+            if random.random() < self.mutation_rate:
+                chromosome[i] += random.gauss(0, sigma)
+        return chromosome

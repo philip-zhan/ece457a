@@ -15,10 +15,11 @@ print('simple mutation', mutation.simple(parent1))
 # RGA
 parent1 = [0, 0, 0, 0, 0]
 parent2 = [0.1, 0.2, 0.3, 0.4, 0.5]
-print('uniform mutation', mutation.uniform(parent2))
 # print('SINGLE_ARITHMETIC', crossover.single_arithmetic(parent1, parent2))
 # print('SIMPLE_ARITHMETIC', crossover.simple_arithmetic(parent1, parent2))
 # print('WHOLE_ARITHMETIC', crossover.whole_arithmetic(parent1, parent2))
+print('uniform mutation', mutation.uniform(parent2))
+print('noise mutation', mutation.random_noise(parent2, 0.1))
 
 # PGA
 parent1 = [1, 2, 3, 4, 5]
