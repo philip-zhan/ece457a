@@ -1,43 +1,43 @@
-from enum import Enum, auto
 import random
 
 
-# parameters
-alpha = 0.5
+class Crossover:
+    # ONE_POINT = auto()
+    # N_POINT = auto()
+    # UNIFORM = auto()
+    # SINGLE_ARITHMETIC = auto()
+    # SIMPLE_ARITHMETIC = auto()
+    # WHOLE_ARITHMETIC = auto()
+    # PMX = auto()
+    # ORDER1 = auto()
+    # CYCLE = auto()
 
+    # alpha = 0.5
 
-class Crossover(Enum):
-    ONE_POINT = auto()
-    N_POINT = auto()
-    UNIFORM = auto()
-    SINGLE_ARITHMETIC = auto()
-    SIMPLE_ARITHMETIC = auto()
-    WHOLE_ARITHMETIC = auto()
-    PMX = auto()
-    ORDER1 = auto()
-    CYCLE = auto()
+    def __init__(self, alpha):
+        self.alpha = alpha
 
-    def run(self, parent1, parent2):
-        if len(parent1) != len(parent2):
-            return None
-        if self is self.ONE_POINT:
-            return self.one_point(parent1, parent2)
-        if self is self.N_POINT:
-            return self.n_point(parent1, parent2)
-        if self is self.UNIFORM:
-            return self.uniform(parent1, parent2)
-        if self is self.SINGLE_ARITHMETIC:
-            return self.single_arithmetic(parent1, parent2)
-        if self is self.SIMPLE_ARITHMETIC:
-            return self.simple_arithmetic(parent1, parent2)
-        if self is self.WHOLE_ARITHMETIC:
-            return self.whole_arithmetic(parent1, parent2)
-        if self is self.PMX:
-            return self.pmx(parent1, parent2)
-        if self is self.ORDER1:
-            return self.order1(parent1, parent2)
-        if self is self.CYCLE:
-            return self.cycle(parent1, parent2)
+    # def run(self, parent1, parent2):
+    #     if len(parent1) != len(parent2):
+    #         return None
+    #     if self is self.ONE_POINT:
+    #         return self.one_point(parent1, parent2)
+    #     if self is self.N_POINT:
+    #         return self.n_point(parent1, parent2)
+    #     if self is self.UNIFORM:
+    #         return self.uniform(parent1, parent2)
+    #     if self is self.SINGLE_ARITHMETIC:
+    #         return self.single_arithmetic(parent1, parent2)
+    #     if self is self.SIMPLE_ARITHMETIC:
+    #         return self.simple_arithmetic(parent1, parent2)
+    #     if self is self.WHOLE_ARITHMETIC:
+    #         return self.whole_arithmetic(parent1, parent2)
+    #     if self is self.PMX:
+    #         return self.pmx(parent1, parent2)
+    #     if self is self.ORDER1:
+    #         return self.order1(parent1, parent2)
+    #     if self is self.CYCLE:
+    #         return self.cycle(parent1, parent2)
 
     def one_point(self, parent1, parent2):
         k = random.randrange(len(parent1))
@@ -71,8 +71,8 @@ class Crossover(Enum):
         k = random.randrange(len(parent1))
         child1 = parent1.copy()
         child2 = parent2.copy()
-        child1[k] = alpha * parent2[k] + (1 - alpha) * parent1[k]
-        child2[k] = alpha * parent1[k] + (1 - alpha) * parent2[k]
+        child1[k] = self.alpha * parent2[k] + (1 - self.alpha) * parent1[k]
+        child2[k] = self.alpha * parent1[k] + (1 - self.alpha) * parent2[k]
         return child1, child2
 
     def simple_arithmetic(self, parent1, parent2):
@@ -80,16 +80,16 @@ class Crossover(Enum):
         child1 = parent1.copy()
         child2 = parent2.copy()
         for i in range(k+1, len(parent1)):
-            child1[i] = alpha * parent2[i] + (1 - alpha) * parent1[i]
-            child2[i] = alpha * parent1[i] + (1 - alpha) * parent2[i]
+            child1[i] = self.alpha * parent2[i] + (1 - self.alpha) * parent1[i]
+            child2[i] = self.alpha * parent1[i] + (1 - self.alpha) * parent2[i]
         return child1, child2
 
     def whole_arithmetic(self, parent1, parent2):
         child1 = parent1.copy()
         child2 = parent2.copy()
         for i in range(len(parent1)):
-            child1[i] = alpha * parent1[i] + (1 - alpha) * parent2[i]
-            child2[i] = alpha * parent2[i] + (1 - alpha) * parent1[i]
+            child1[i] = self.alpha * parent1[i] + (1 - self.alpha) * parent2[i]
+            child2[i] = self.alpha * parent2[i] + (1 - self.alpha) * parent1[i]
         return child1, child2
 
     def pmx(self, parent1, parent2):
