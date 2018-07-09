@@ -125,17 +125,27 @@ class Crossover:
         return child1, child2
 
     def order1(self, parent1, parent2):
-        k = random.randrange(len(parent1))
-        length = random.randrange(len(parent1))
-        child = parent1
-        start = (k+length) % (len(parent1)-1)
-        childIndex = start
-        for i in range(len(parent2)):
-            parentIndex = (start+i) % (len(parent2)-1)
-            if parent2[parentIndex] not in child:
-                child[childIndex] = parent2[parentIndex]
-                childIndex = (childIndex + 1) % (len(parent1)-1)
-        return child
+        children = []
+        print("parent is "+str(parent1)+" and "+str(parent2))
+        for j in range(2):
+            parent = parent1 if j == 0 else parent2
+            otherParent = parent2 if parent == parent1 else parent1
+            k = random.randrange(len(parent))
+            length = random.randrange(len(parent))
+            child = [None] * len(parent)
+            for offset in range(length):
+                child[(k+offset) % len(parent)] = parent[(k+offset) % len(parent)]
+            print("k is "+str(k)+" length is "+str(length)+" child is "+str(child))
+            start = (k+length) % (len(parent))
+            parentIndex = start
+            for j in range(len(otherParent)):
+                parentElement = otherParent[parentIndex]
+                parentIndex = (parentIndex + 1) % len(otherParent)
+                if parentElement not in child:
+                    child[start] = parentElement
+                    start = (start + 1) % len(child)
+            children.append(child)
+        return children
 
     def cycle(self, parent1, parent2):
         pass
