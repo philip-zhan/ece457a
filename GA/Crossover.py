@@ -63,10 +63,13 @@ class Crossover:
         start = random.randrange(length)
         stop = random.randrange(start, length)
         # print(start, stop)
-        child1 = [None] * start + parent1[start:stop] + \
-                 [None] * (length - stop)
-        child2 = [None] * start + parent2[start:stop] + \
-                 [None] * (length - stop)
+        child1 = [None] * start
+        child1.extend(parent1[start:stop])
+        child1.extend([None] * (length - stop))
+        child2 = [None] * start
+        child2.extend(parent1[start:stop])
+        child2.extend([None] * (length - stop))
+        # child2 = [None] * start + parent2[start:stop] + [None] * (length - stop)
         # print(child1, child2)
         for i in range(start, stop):
             if parent2[i] not in child1:
@@ -92,7 +95,7 @@ class Crossover:
 
     def order1(self, parent1, parent2):
         children = []
-        print("parent is "+str(parent1)+" and "+str(parent2))
+        print("parent is " + str(parent1) + " and " + str(parent2))
         for j in range(2):
             parent = parent1 if j == 0 else parent2
             otherParent = parent2 if parent == parent1 else parent1
@@ -100,9 +103,9 @@ class Crossover:
             length = random.randrange(len(parent))
             child = [None] * len(parent)
             for offset in range(length):
-                child[(k+offset) % len(parent)] = parent[(k+offset) % len(parent)]
-            print("k is "+str(k)+" length is "+str(length)+" child is "+str(child))
-            start = (k+length) % (len(parent))
+                child[(k + offset) % len(parent)] = parent[(k + offset) % len(parent)]
+            print("k is " + str(k) + " length is " + str(length) + " child is " + str(child))
+            start = (k + length) % (len(parent))
             parentIndex = start
             for j in range(len(otherParent)):
                 parentElement = otherParent[parentIndex]

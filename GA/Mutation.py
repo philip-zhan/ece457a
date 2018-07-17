@@ -44,12 +44,11 @@ class Mutation:
         return chromosome
 
     def inversion(self, chromosome):
-        if random.random() < self.mutation_rate:
-            first = random.randrange(len(chromosome) - 1)
-        second = random.randrange(first + 1, len(chromosome))
-        chromosome[]
-        temp = chromosome[first]
-        chromosome[first] = chromosome[second]
-        chromosome[second] = temp
-
+        # if random.random() < self.mutation_rate:
+        #     first = random.randrange(len(chromosome) - 1)
+        # second = random.randrange(first + 1, len(chromosome))
+        # chromosome[]
+        # temp = chromosome[first]
+        # chromosome[first] = chromosome[second]
+        # chromosome[second] = temp
         return chromosome
