@@ -100,7 +100,8 @@ def run_aco(nodes, cost_dict, neighbourhood, pheromone_dict, home):
 def select_a_solution(current_path, cost_dict, pheromone_dict, home):
     # initialize the tabu list and the new_path
     remaining_nodes = [node for node in current_path]
-    new_path = []
+    remaining_nodes.remove(home)
+    new_path = [home]
     start_node = home
     # stop until the new_path is filled
     while len(new_path) < len(current_path):
